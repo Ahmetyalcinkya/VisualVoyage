@@ -36,8 +36,8 @@ public class User {
     @Column(name = "gender")
     private String gender;
 
-    private List<Integer> followers;
+    private List<Long> followers;
 
-    private List<Integer> followings;
+    private List<Long> followings;
 
 }
