@@ -43,4 +43,6 @@ public class User {
 
     private Set<Long> followings = new HashSet<>();
 
+    private List<Post> savedPost = new ArrayList<>();
+
 }

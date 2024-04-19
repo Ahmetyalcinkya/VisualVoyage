@@ -2,6 +2,7 @@ package com.vv.VisualVoyage.services.concretes;
 
 import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.requests.UserUpdateDto;
+import com.vv.VisualVoyage.dtos.responses.PostResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.User;
 import com.vv.VisualVoyage.repositories.UserRepository;
@@ -26,7 +27,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public UserResponse registerUser(UserSaveDto userSaveDto) {
+    public UserResponse registerUser(UserSaveDto userSaveDto) { //TODO CHECK THE SAVED POSTS FOR ALL RESPONSES AFTER UI COMPLETED!
         User user = User.builder()
                 .firstName(userSaveDto.getFirstName())
                 .lastName(userSaveDto.getLastName())
@@ -35,8 +36,18 @@ public class UserManager implements UserService {
                 .gender(userSaveDto.getGender())
                 .followers(new HashSet<>())
                 .followings(new HashSet<>())
+                .savedPost(new ArrayList<>())
                 .build();
         User saved = userRepository.save(user);
+        //Saved posts converted to post response!
+        List<PostResponse> savedPosts = saved.getSavedPost().stream().map(post -> PostResponse.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .image(post.getImage())
+                .video(post.getVideo())
+                .createdAt(post.getCreatedAt())
+                .build()).toList();
+
         return UserResponse.builder()
                 .id(saved.getId())
                 .firstName(saved.getFirstName())
@@ -45,6 +56,7 @@ public class UserManager implements UserService {
                 .gender(saved.getGender())
                 .followers(saved.getFollowers())
                 .followings(saved.getFollowings())
+                .savedPosts(savedPosts)
                 .build();
     }
 
@@ -96,7 +108,7 @@ public class UserManager implements UserService {
 
     @Transactional
     @Override
-    public String followUser(long reqUserId, long followUserId) {
+    public String followUser(long reqUserId, long followUserId) { //TODO CHECK IF THE USER ALREADY FOLLOWING ? REMOVE : ADD
 
         User reqUser = userRepository.findById(reqUserId)
                 .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!

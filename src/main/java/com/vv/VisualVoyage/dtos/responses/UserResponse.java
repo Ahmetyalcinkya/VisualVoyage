@@ -20,4 +20,5 @@ public class UserResponse {
     private String gender;
     private Set<Long> followers;
     private Set<Long> followings;
+    private List<PostResponse> savedPosts;
 }
