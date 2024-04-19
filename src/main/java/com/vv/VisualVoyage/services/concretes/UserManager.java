@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +33,8 @@ public class UserManager implements UserService {
                 .email(userSaveDto.getEmail())
                 .password(userSaveDto.getPassword())
                 .gender(userSaveDto.getGender())
-                .followers(new ArrayList<>())
-                .followings(new ArrayList<>())
+                .followers(new HashSet<>())
+                .followings(new HashSet<>())
                 .build();
         User saved = userRepository.save(user);
         return UserResponse.builder()

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +18,6 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String gender;
-    private List<Long> followers;
-    private List<Long> followings;
+    private Set<Long> followers;
+    private Set<Long> followings;
 }

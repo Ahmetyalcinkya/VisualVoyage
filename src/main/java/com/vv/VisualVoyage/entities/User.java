@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -37,8 +39,8 @@ public class User {
     @Column(name = "gender")
     private String gender;
 
-    private List<Long> followers = new ArrayList<>();
+    private Set<Long> followers = new HashSet<>();
 
-    private List<Long> followings = new ArrayList<>();
+    private Set<Long> followings = new HashSet<>();
 
 }
