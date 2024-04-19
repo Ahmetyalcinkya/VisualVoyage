@@ -43,6 +43,7 @@ public class User {
 
     private Set<Long> followings = new HashSet<>();
 
+    @ManyToMany
     private List<Post> savedPost = new ArrayList<>();
 
 }

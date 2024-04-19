@@ -2,6 +2,7 @@ package com.vv.VisualVoyage.services.concretes;
 
 import com.vv.VisualVoyage.dtos.requests.PostSaveDto;
 import com.vv.VisualVoyage.dtos.responses.PostResponse;
+import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.Post;
 import com.vv.VisualVoyage.entities.User;
 import com.vv.VisualVoyage.repositories.PostRepository;
@@ -47,6 +48,7 @@ public class PostManager implements PostService {
                 .image(saved.getImage())
                 .video(saved.getVideo())
                 .createdAt(saved.getCreatedAt())
+                .userId(saved.getUser().getId())
                 .build();
     }
 
@@ -73,6 +75,7 @@ public class PostManager implements PostService {
                 .image(post.getImage())
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
+                .userId(post.getUser().getId())
                 .build()).collect(Collectors.toList());
     }
 
@@ -86,6 +89,14 @@ public class PostManager implements PostService {
                 .image(post.getImage())
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
+                .userId(post.getUser().getId())
+                .liked(post.getLiked().stream().map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .gender(user.getGender())
+                        .build()).collect(Collectors.toSet()))
                 .build();
     }
 
@@ -99,6 +110,7 @@ public class PostManager implements PostService {
                 .image(post.getImage())
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
+                .userId(post.getUser().getId())
                 .build()).collect(Collectors.toList());
     }
 
@@ -121,6 +133,7 @@ public class PostManager implements PostService {
                 .image(post.getImage())
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
+                .userId(post.getUser().getId())
                 .build();
     }
 
@@ -146,6 +159,14 @@ public class PostManager implements PostService {
                 .image(post.getImage())
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
+                .userId(post.getUser().getId())
+                .liked(post.getLiked().stream().map(likedUser -> UserResponse.builder()
+                        .id(likedUser.getId())
+                        .firstName(likedUser.getFirstName())
+                        .lastName(likedUser.getLastName())
+                        .email(likedUser.getEmail())
+                        .gender(likedUser.getGender())
+                        .build()).collect(Collectors.toSet()))
                 .build();
     }
 }

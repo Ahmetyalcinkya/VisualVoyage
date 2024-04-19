@@ -6,15 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponse {
+public class PostResponse { //TODO UserId - Liked must be added here for the ui!
     private Long id;
     private String caption;
     private String image;
     private String video;
     private LocalDateTime createdAt;
+    private Long userId;
+    private Set<UserResponse> liked;
 }
