@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -36,8 +37,8 @@ public class User {
     @Column(name = "gender")
     private String gender;
 
-    private List<Long> followers;
+    private List<Long> followers = new ArrayList<>();
 
-    private List<Long> followings;
+    private List<Long> followings = new ArrayList<>();
 
 }

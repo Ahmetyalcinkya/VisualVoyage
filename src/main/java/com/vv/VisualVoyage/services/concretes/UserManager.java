@@ -1,5 +1,6 @@
 package com.vv.VisualVoyage.services.concretes;
 
+import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.requests.UserUpdateDto;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,43 @@ public class UserManager implements UserService {
     }
 
     @Override
+    public UserResponse registerUser(UserSaveDto userSaveDto) {
+        User user = User.builder()
+                .firstName(userSaveDto.getFirstName())
+                .lastName(userSaveDto.getLastName())
+                .email(userSaveDto.getEmail())
+                .password(userSaveDto.getPassword())
+                .gender(userSaveDto.getGender())
+                .followers(new ArrayList<>())
+                .followings(new ArrayList<>())
+                .build();
+        User saved = userRepository.save(user);
+        return UserResponse.builder()
+                .id(saved.getId())
+                .firstName(saved.getFirstName())
+                .lastName(saved.getFirstName())
+                .email(saved.getEmail())
+                .gender(saved.getGender())
+                .followers(saved.getFollowers())
+                .followings(saved.getFollowings())
+                .build();
+    }
+
+    @Override
+    public List<UserResponse> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .gender(user.getGender())
+                .followers(user.getFollowers())
+                .followings(user.getFollowings())
+                .build()).collect(Collectors.toList());
+    }
+
+    @Override
     public UserResponse findUserById(long id) {
         User user = userRepository.findById(id)
                .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!
@@ -30,9 +69,11 @@ public class UserManager implements UserService {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
-                .lastName(user.getFirstName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .followers(user.getFollowers())
+                .followings(user.getFollowings())
                 .build();
     }
 
@@ -44,9 +85,11 @@ public class UserManager implements UserService {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
-                .lastName(user.getFirstName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .followers(user.getFollowers())
+                .followings(user.getFollowings())
                 .build();
     }
 
@@ -78,6 +121,8 @@ public class UserManager implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .followers(user.getFollowers())
+                .followings(user.getFollowings())
                 .build()).collect(Collectors.toList());
     }
 
@@ -102,6 +147,8 @@ public class UserManager implements UserService {
                 .lastName(updated.getLastName())
                 .email(updated.getEmail())
                 .gender(updated.getGender())
+                .followers(updated.getFollowers())
+                .followings(updated.getFollowings())
                 .build();
     }
 }
