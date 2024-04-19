@@ -35,7 +35,7 @@ public class Post {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany //TODO CAN BE REPLACED WITH -> MANY TO MANY
+    @ManyToMany
     private Set<User> liked = new HashSet<>();
 
     @ManyToOne
