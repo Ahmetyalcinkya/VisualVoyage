@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -17,8 +18,9 @@ public class SecurityConfig {
         http
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/**").authenticated().anyRequest().permitAll()
-                ).csrf(csrf -> csrf.disable());
+                auth.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
