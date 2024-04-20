@@ -45,11 +45,11 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    @PutMapping("/{postId}/user/{userId}")
+    @PutMapping("/save/{postId}/user/{userId}")
     public ResponseEntity<PostResponse> savedPost(@PathVariable long postId, @PathVariable long userId){
         return ResponseEntity.ok(postService.savedPost(postId, userId));
     }
-    @PutMapping("/{postId}/like/user/{userId}")
+    @PutMapping("/like/{postId}/user/{userId}")
     public ResponseEntity<PostResponse> likePost(@PathVariable long postId, @PathVariable long userId){
         return ResponseEntity.ok(postService.likePost(postId, userId));
     }

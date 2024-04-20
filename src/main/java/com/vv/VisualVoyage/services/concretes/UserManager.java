@@ -87,6 +87,14 @@ public class UserManager implements UserService {
                 .gender(user.getGender())
                 .followers(user.getFollowers())
                 .followings(user.getFollowings())
+                .savedPosts(user.getSavedPost().stream().map(post -> PostResponse.builder()
+                        .id(post.getId())
+                        .caption(post.getCaption())
+                        .image(post.getImage())
+                        .video(post.getVideo())
+                        .userId(post.getUser().getId())
+                        .createdAt(post.getCreatedAt())
+                        .build()).toList())
                 .build();
     }
 
@@ -103,6 +111,14 @@ public class UserManager implements UserService {
                 .gender(user.getGender())
                 .followers(user.getFollowers())
                 .followings(user.getFollowings())
+                .savedPosts(user.getSavedPost().stream().map(post -> PostResponse.builder()
+                        .id(post.getId())
+                        .caption(post.getCaption())
+                        .image(post.getImage())
+                        .video(post.getVideo())
+                        .userId(post.getUser().getId())
+                        .createdAt(post.getCreatedAt())
+                        .build()).toList())
                 .build();
     }
 

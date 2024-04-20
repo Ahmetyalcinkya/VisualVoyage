@@ -43,7 +43,7 @@ public class User {
 
     private Set<Long> followings = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany //TODO Check the database subtables if they are not in the database add join columns inverse!
     private List<Post> savedPost = new ArrayList<>();
 
 }
