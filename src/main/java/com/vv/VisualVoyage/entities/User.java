@@ -43,7 +43,19 @@ public class User {
 
     private Set<Long> followings = new HashSet<>();
 
-    @ManyToMany //TODO Check the database subtables if they are not in the database add join columns inverse!
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
+            CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "user_liked", schema = "social",
+            joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<Post> likedPosts = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
+            CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "user_saved", schema = "social",
+            joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "post_id"))
     private List<Post> savedPost = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Post> posts;
 
 }
