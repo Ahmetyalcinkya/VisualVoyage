@@ -20,11 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/")
-    public UserResponse registerUser(@RequestBody UserSaveDto userSaveDto){
-        return userService.registerUser(userSaveDto);
-    }
-
     @GetMapping("/all")
     public List<UserResponse> getAllUsers(){
         return userService.findAllUsers();

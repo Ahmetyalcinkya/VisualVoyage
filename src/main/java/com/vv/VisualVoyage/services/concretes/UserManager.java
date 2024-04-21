@@ -1,6 +1,5 @@
 package com.vv.VisualVoyage.services.concretes;
 
-import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.requests.UserUpdateDto;
 import com.vv.VisualVoyage.dtos.responses.PostResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,40 +21,6 @@ public class UserManager implements UserService {
     @Autowired
     public UserManager(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserResponse registerUser(UserSaveDto userSaveDto) { //TODO CHECK THE SAVED POSTS FOR ALL RESPONSES AFTER UI COMPLETED!
-        User user = User.builder()
-                .firstName(userSaveDto.getFirstName())
-                .lastName(userSaveDto.getLastName())
-                .email(userSaveDto.getEmail())
-                .password(userSaveDto.getPassword())
-                .gender(userSaveDto.getGender())
-                .followers(new HashSet<>())
-                .followings(new HashSet<>())
-                .savedPost(new ArrayList<>())
-                .build();
-        User saved = userRepository.save(user);
-        //Saved posts converted to post response!
-        List<PostResponse> savedPosts = saved.getSavedPost().stream().map(post -> PostResponse.builder()
-                .id(post.getId())
-                .caption(post.getCaption())
-                .image(post.getImage())
-                .video(post.getVideo())
-                .createdAt(post.getCreatedAt())
-                .build()).toList();
-
-        return UserResponse.builder()
-                .id(saved.getId())
-                .firstName(saved.getFirstName())
-                .lastName(saved.getFirstName())
-                .email(saved.getEmail())
-                .gender(saved.getGender())
-                .followers(saved.getFollowers())
-                .followings(saved.getFollowings())
-                .savedPosts(savedPosts)
-                .build();
     }
 
     @Override
