@@ -2,6 +2,8 @@ package com.vv.VisualVoyage.controllers;
 
 import com.vv.VisualVoyage.dtos.requests.PostSaveDto;
 import com.vv.VisualVoyage.dtos.responses.PostResponse;
+import com.vv.VisualVoyage.dtos.responses.UserResponse;
+import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
 import com.vv.VisualVoyage.services.abstracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,52 +13,57 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
 public class PostController {
 
     private PostService postService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, AuthenticationService authenticationService) {
         this.postService = postService;
+        this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/user/{userId}")
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostSaveDto postSaveDto,@PathVariable long userId){ //TODO THIS METHOD WILL BE UPDATED GETAUTHENTICATEDUSER
-        PostResponse post = postService.createNewPost(postSaveDto, userId);
+    @PostMapping("/api/posts/")
+    public ResponseEntity<PostResponse> createPost(@RequestBody PostSaveDto postSaveDto, @RequestHeader("Authorization") String jwt){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        PostResponse post = postService.createNewPost(postSaveDto, requestUser.getId());
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
-    @GetMapping("/")
+    @GetMapping("/posts/all")
     public ResponseEntity<List<PostResponse>> findAllPosts(){
         List<PostResponse> posts = postService.findAllPosts();
 
         return ResponseEntity.ok(posts);
     }
-    @GetMapping("/user/{userId}")
+    @GetMapping("/posts/user/{userId}")
     public ResponseEntity<List<PostResponse>> findPostsByUserId(@PathVariable long userId){
         List<PostResponse> posts = postService.findPostsByUserId(userId);
 
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponse> findPostById(@PathVariable long postId){
         PostResponse post = postService.findPostById(postId);
         return ResponseEntity.ok(post);
     }
 
-    @PutMapping("/save/{postId}/user/{userId}")
-    public ResponseEntity<PostResponse> savedPost(@PathVariable long postId, @PathVariable long userId){
-        return ResponseEntity.ok(postService.savedPost(postId, userId));
+    @PutMapping("/api/posts/save/{postId}")
+    public ResponseEntity<PostResponse> savedPost(@PathVariable long postId, @RequestHeader("Authorization") String jwt){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        return ResponseEntity.ok(postService.savedPost(postId, requestUser.getId()));
     }
-    @PutMapping("/like/{postId}/user/{userId}")
-    public ResponseEntity<PostResponse> likePost(@PathVariable long postId, @PathVariable long userId){
-        return ResponseEntity.ok(postService.likePost(postId, userId));
+    @PutMapping("/api/posts/like/{postId}")
+    public ResponseEntity<PostResponse> likePost(@PathVariable long postId, @RequestHeader("Authorization") String jwt){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        return ResponseEntity.ok(postService.likePost(postId, requestUser.getId()));
     }
 
-    @DeleteMapping("/{postId}/user/{userId}")
-    public ResponseEntity<String> deletePost(@PathVariable long postId, @PathVariable long userId){
-        String message = postService.deletePost(postId, userId);
+    @DeleteMapping("/api/posts/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable long postId, @RequestHeader("Authorization") String jwt){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        String message = postService.deletePost(postId, requestUser.getId());
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 

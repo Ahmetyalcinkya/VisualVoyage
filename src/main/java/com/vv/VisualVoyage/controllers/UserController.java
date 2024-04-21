@@ -1,8 +1,8 @@
 package com.vv.VisualVoyage.controllers;
 
-import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.requests.UserUpdateDto;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
+import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
 import com.vv.VisualVoyage.services.abstracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,35 +10,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users") //TODO Request mapping will be changed! /users/ must be added to all methods. /api/ must be added to private endpoints. Like follow
 public class UserController {
 
     private UserService userService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/users/all")
     public List<UserResponse> getAllUsers(){
         return userService.findAllUsers();
     }
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public UserResponse getUserById(@PathVariable long id){
         return userService.findUserById(id);
     }
-    @GetMapping("/search")
+    @GetMapping("/users/search")
     public List<UserResponse> searchUser(@RequestParam("query") String query){
         return userService.searchUser(query);
     }
 
-    @PutMapping("/{id}")
-    public UserResponse updateUser(@RequestBody UserUpdateDto userUpdateDto, @PathVariable long id){
-        return userService.updateUser(userUpdateDto,id);
+    @PutMapping("/api/users/")
+    public UserResponse updateUser(@RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String jwt){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        return userService.updateUser(userUpdateDto, requestUser.getId());
     }
-    @PutMapping("/follow/{reqId}/{followId}")
-    public String followUser(@PathVariable long reqId, @PathVariable long followId){
-        return userService.followUser(reqId,followId);
+    @PutMapping("/api/users/follow/{followId}")
+    public String followUser(@RequestHeader("Authorization") String jwt, @PathVariable long followId){
+        UserResponse requestUser = authenticationService.findUserByJwt(jwt);
+        return userService.followUser(requestUser.getId(), followId);
     }
 }

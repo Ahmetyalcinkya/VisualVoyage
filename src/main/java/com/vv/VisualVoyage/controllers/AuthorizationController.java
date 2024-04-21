@@ -3,12 +3,10 @@ package com.vv.VisualVoyage.controllers;
 import com.vv.VisualVoyage.dtos.requests.LoginRequest;
 import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.responses.LoginResponse;
+import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,5 +27,9 @@ public class AuthorizationController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
         return authenticationService.login(loginRequest);
+    }
+    @GetMapping("/verify")
+    public UserResponse getUserByJwt(@RequestHeader("Authorization") String jwt){
+        return authenticationService.findUserByJwt(jwt);
     }
 }

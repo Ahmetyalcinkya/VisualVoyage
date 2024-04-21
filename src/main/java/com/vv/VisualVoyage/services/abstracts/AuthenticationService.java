@@ -9,4 +9,6 @@ public interface AuthenticationService {
 
     LoginResponse register(UserSaveDto userSaveDto);
     LoginResponse login(LoginRequest loginRequest);
+    UserResponse findUserByJwt(String jwt);
+
 }

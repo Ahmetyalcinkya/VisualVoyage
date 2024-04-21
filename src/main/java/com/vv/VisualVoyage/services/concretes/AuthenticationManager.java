@@ -3,6 +3,7 @@ package com.vv.VisualVoyage.services.concretes;
 import com.vv.VisualVoyage.dtos.requests.LoginRequest;
 import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.responses.LoginResponse;
+import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.User;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
@@ -68,7 +69,21 @@ public class AuthenticationManager implements AuthenticationService {
 
         return new LoginResponse(token, "Login success!");
     }
+    @Override
+    public UserResponse findUserByJwt(String jwt) {
+        String email = JwtProvider.getEmailFromJwt(jwt);
 
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found with the given email!")); //TODO Throw exception
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .gender(user.getGender())
+                .followers(user.getFollowers())
+                .followings(user.getFollowings())
+                .build();
+    }
     private Authentication authenticate(String email, String password){
         UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);
 
