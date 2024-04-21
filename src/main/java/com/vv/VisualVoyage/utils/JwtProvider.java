@@ -24,7 +24,7 @@ public class JwtProvider {
 
     public static String getEmailFromJwt(String jwt){
         jwt = jwt.substring(7);
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(jwt).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
         return String.valueOf(claims.get("email"));
     }
