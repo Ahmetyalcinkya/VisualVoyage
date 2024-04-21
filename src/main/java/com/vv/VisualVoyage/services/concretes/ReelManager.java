@@ -7,6 +7,7 @@ import com.vv.VisualVoyage.entities.User;
 import com.vv.VisualVoyage.repositories.ReelRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.ReelService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,12 @@ public class ReelManager implements ReelService {
 
     private ReelRepository reelRepository;
     private UserRepository userRepository;
+
+    @Autowired
+    public ReelManager(ReelRepository reelRepository, UserRepository userRepository) {
+        this.reelRepository = reelRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public ReelResponse createReel(ReelSaveDto reelSaveDto, long userId) {
