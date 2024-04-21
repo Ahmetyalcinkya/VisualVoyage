@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +43,7 @@ public class CommentManager implements CommentService {
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .post(post)
+                .liked(new HashSet<>())
                 .build();
         commentRepository.save(comment);
         post.getComments().add(comment);
