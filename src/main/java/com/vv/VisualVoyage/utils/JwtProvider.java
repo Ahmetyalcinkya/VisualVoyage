@@ -1,5 +1,6 @@
 package com.vv.VisualVoyage.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
@@ -19,5 +20,12 @@ public class JwtProvider {
                 .claim("email", auth.getName())
                 .signWith(key)
                 .compact();
+    }
+
+    public static String getEmailFromJwt(String jwt){
+        jwt = jwt.substring(7);
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(jwt).getBody();
+
+        return String.valueOf(claims.get("email"));
     }
 }
