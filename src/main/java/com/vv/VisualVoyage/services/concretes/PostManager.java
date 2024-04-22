@@ -96,7 +96,7 @@ public class PostManager implements PostService {
                         .lastName(user.getLastName())
                         .email(user.getEmail())
                         .gender(user.getGender())
-                        .build()).collect(Collectors.toSet()))
+                        .build()).toList())
                 .build();
     }
 
@@ -166,7 +166,7 @@ public class PostManager implements PostService {
                         .lastName(likedUser.getLastName())
                         .email(likedUser.getEmail())
                         .gender(likedUser.getGender())
-                        .build()).collect(Collectors.toSet()))
+                        .build()).toList())
                 .build();
     }
 }

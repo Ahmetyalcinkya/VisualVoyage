@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class ChatManager implements ChatService {
@@ -51,6 +52,7 @@ public class ChatManager implements ChatService {
         }
         Chat chat = Chat.builder()
                 .timestamp(LocalDateTime.now())
+                .users(new ArrayList<>())
                 .build();
         chat.getUsers().add(mesUser);
         chat.getUsers().add(reqUser);

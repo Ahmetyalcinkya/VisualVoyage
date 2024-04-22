@@ -47,7 +47,7 @@ public class User {
             CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "user_liked", schema = "social",
             joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> likedPosts = new HashSet<>();
+    private List<Post> likedPosts = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
             CascadeType.PERSIST,CascadeType.REFRESH})
@@ -68,7 +68,7 @@ public class User {
             CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "user_comment_liked", schema = "social",
             joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private Set<Comment> likedComments = new HashSet<>();
+    private List<Comment> likedComments = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
             CascadeType.PERSIST,CascadeType.REFRESH})

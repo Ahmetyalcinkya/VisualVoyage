@@ -41,13 +41,13 @@ public class Post {
             CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "user_liked", schema = "social",
             joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> liked = new HashSet<>();
+    private List<User> liked = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
             CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "user_saved", schema = "social",
             joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> saved = new HashSet<>();
+    private List<User> saved = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,
             CascadeType.PERSIST,CascadeType.REFRESH})

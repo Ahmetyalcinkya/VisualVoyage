@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -38,7 +40,7 @@ public class Comment {
             CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "user_comment_liked", schema = "social",
             joinColumns = @JoinColumn(name = "comment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> liked = new HashSet<>();
+    private List<User> liked = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,
             CascadeType.PERSIST,CascadeType.REFRESH})

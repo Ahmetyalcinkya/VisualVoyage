@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -18,5 +19,5 @@ public class CommentResponse {
     private LocalDateTime createdAt;
     private UserResponse user;
     private PostResponse post;
-    private Set<UserResponse> liked;
+    private List<UserResponse> liked;
 }

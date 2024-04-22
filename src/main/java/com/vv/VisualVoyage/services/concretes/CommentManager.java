@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class CommentManager implements CommentService {
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .post(post)
-                .liked(new HashSet<>())
+                .liked(new ArrayList<>())
                 .build();
         commentRepository.save(comment);
         post.getComments().add(comment);
@@ -74,7 +75,7 @@ public class CommentManager implements CommentService {
                         .lastName(likedUser.getLastName())
                         .email(likedUser.getEmail())
                         .gender(likedUser.getGender())
-                        .build()).collect(Collectors.toSet()))
+                        .build()).toList())
                 .build();
     }
 
@@ -117,7 +118,7 @@ public class CommentManager implements CommentService {
                         .lastName(likedUser.getLastName())
                         .email(likedUser.getEmail())
                         .gender(likedUser.getGender())
-                        .build()).collect(Collectors.toSet()))
+                        .build()).toList())
                 .build();
     }
 
@@ -151,7 +152,7 @@ public class CommentManager implements CommentService {
                         .lastName(likedUser.getLastName())
                         .email(likedUser.getEmail())
                         .gender(likedUser.getGender())
-                        .build()).collect(Collectors.toSet()))
+                        .build()).toList())
                 .build();
     }
 }
