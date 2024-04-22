@@ -28,11 +28,13 @@ public class ReelController {
         return reelService.createReel(reelSaveDto, requestUser.getId());
     }
     @GetMapping("/api/reels/all")
-    public List<ReelResponse> getAllReels(){
+    public List<ReelResponse> getAllReels(@RequestHeader("Authorization") String jwt){
+        authenticationService.findUserByJwt(jwt);
         return reelService.findAllReels();
     }
     @GetMapping("/api/reels/user/{userId}")
-    public List<ReelResponse> getReelsByUser(@PathVariable long userId){
+    public List<ReelResponse> getReelsByUser(@RequestHeader("Authorization") String jwt,@PathVariable long userId){
+        authenticationService.findUserByJwt(jwt);
         return reelService.findReelsByUser(userId);
     }
 }

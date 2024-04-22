@@ -44,7 +44,8 @@ public class MessageManager implements MessageService {
                 .timestamp(LocalDateTime.now())
                 .build();
         Message saved = messageRepository.save(message);
-
+        chat.getMessages().add(saved);
+        chatRepository.save(chat);
         return MessageResponse.builder()
                 .id(saved.getId())
                 .content(saved.getContent())

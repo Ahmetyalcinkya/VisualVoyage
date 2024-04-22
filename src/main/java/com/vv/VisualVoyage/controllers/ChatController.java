@@ -33,7 +33,8 @@ public class ChatController {
         return chatService.findUsersChat(requestUser.getId());
     }
     @GetMapping("/api/chats/{chatId}")
-    public ChatResponse getUsersChat(@PathVariable long chatId){
+    public ChatResponse getUsersChat(@RequestHeader("Authorization") String jwt, @PathVariable long chatId){
+        authenticationService.findUserByJwt(jwt);
         return chatService.findChatById(chatId);
     }
 
