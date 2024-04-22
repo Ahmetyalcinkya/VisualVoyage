@@ -25,11 +25,11 @@ public class ChatManager implements ChatService {
     }
 
     @Override
-    public ChatResponse createChat(UserResponse requestUser, UserResponse messageUser) {
+    public ChatResponse createChat(UserResponse requestUser, long messageUserId) {
 
         User reqUser = userRepository.findById(requestUser.getId())
                 .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
-                User mesUser = userRepository.findById(messageUser.getId())
+        User mesUser = userRepository.findById(messageUserId)
                 .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
 
         Chat isExist = chatRepository.findChatByUsersId(mesUser, reqUser);

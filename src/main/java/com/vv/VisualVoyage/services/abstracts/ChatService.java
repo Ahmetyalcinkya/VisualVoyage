@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChatService {
 
-    ChatResponse createChat(UserResponse requestUser, UserResponse messageUser);
+    ChatResponse createChat(UserResponse requestUser, long messageUserId);
     ChatResponse findChatById(long chatId);
     List<ChatResponse> findUsersChat(long userId);
 }
