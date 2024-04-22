@@ -37,4 +37,7 @@ public class Chat {
     @JoinTable(name = "user_chat", schema = "social",
             joinColumns = @JoinColumn(name = "chat_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chat")
+    private List<Message> messages = new ArrayList<>();
 }
