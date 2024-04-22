@@ -11,7 +11,6 @@ import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
 import com.vv.VisualVoyage.utils.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -90,8 +89,8 @@ public class AuthenticationManager implements AuthenticationService {
     private Authentication authenticate(String email, String password){
         UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);
 
-        if(userDetails == null) throw new BadCredentialsException("Invalid username!");
-        if(!passwordEncoder.matches(password, userDetails.getPassword())) throw new BadCredentialsException("Wrong password!");
+        if(userDetails == null) throw new VisualVoyageExceptions("Invalid username!", HttpStatus.BAD_REQUEST);
+        if(!passwordEncoder.matches(password, userDetails.getPassword())) throw new VisualVoyageExceptions("Wrong password!", HttpStatus.BAD_REQUEST);
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
