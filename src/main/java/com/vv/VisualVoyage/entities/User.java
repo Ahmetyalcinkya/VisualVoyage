@@ -70,4 +70,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private Set<Comment> likedComments = new HashSet<>();
 
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,
+            CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "user_chat", schema = "social",
+            joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "chat_id"))
+    private List<Chat> chats = new ArrayList<>();
+
 }
