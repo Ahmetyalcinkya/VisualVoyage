@@ -6,11 +6,13 @@ import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.Chat;
 import com.vv.VisualVoyage.entities.Message;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.ChatRepository;
 import com.vv.VisualVoyage.repositories.MessageRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,9 +35,9 @@ public class MessageManager implements MessageService {
     @Override
     public MessageResponse createMessage(UserResponse requestUser, long chatId, MessageRequest messageRequest) {
         Chat chat = chatRepository.findById(chatId)
-                .orElseThrow(() -> new RuntimeException("Chat not found!"));
+                .orElseThrow(() -> new VisualVoyageExceptions("Chat not found!", HttpStatus.NOT_FOUND));
         User user = userRepository.findById(requestUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found!"));
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         Message message = Message.builder()
                 .chat(chat)
                 .content(messageRequest.getContent())
@@ -59,7 +61,7 @@ public class MessageManager implements MessageService {
     @Override
     public List<MessageResponse> findChatMessages(long chatId) {
         Chat chat = chatRepository.findById(chatId)
-                .orElseThrow(() -> new RuntimeException("Chat not found!"));
+                .orElseThrow(() -> new VisualVoyageExceptions("Chat not found!", HttpStatus.NOT_FOUND));
         List<Message> messages = messageRepository.findByChatId(chat.getId());
 
         return messages.stream().map(message -> MessageResponse.builder()

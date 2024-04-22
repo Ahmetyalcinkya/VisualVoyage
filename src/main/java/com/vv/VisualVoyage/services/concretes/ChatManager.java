@@ -4,10 +4,12 @@ import com.vv.VisualVoyage.dtos.responses.ChatResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.Chat;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.ChatRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,9 +31,9 @@ public class ChatManager implements ChatService {
     public ChatResponse createChat(UserResponse requestUser, long messageUserId) {
 
         User reqUser = userRepository.findById(requestUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         User mesUser = userRepository.findById(messageUserId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
 
         Chat isExist = chatRepository.findChatByUsersId(mesUser, reqUser);
 
@@ -76,7 +78,7 @@ public class ChatManager implements ChatService {
     @Override
     public ChatResponse findChatById(long chatId) {
         Chat chat = chatRepository.findById(chatId)
-                .orElseThrow(() -> new RuntimeException("Chat not found with the given id!")); //TODO Throw exception!
+                .orElseThrow(() -> new VisualVoyageExceptions("Chat not found with the given id!",HttpStatus.NOT_FOUND));
 
         return ChatResponse.builder()
                 .id(chat.getId())
@@ -96,7 +98,7 @@ public class ChatManager implements ChatService {
     @Override
     public List<ChatResponse> findUsersChat(long userId) {
         User existUser = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!",HttpStatus.NOT_FOUND));
         List<Chat> chats = chatRepository.findByUsersId(existUser.getId());
 
         return chats.stream().map(chat -> ChatResponse.builder()

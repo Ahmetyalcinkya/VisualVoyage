@@ -5,10 +5,12 @@ import com.vv.VisualVoyage.dtos.responses.PostResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.Post;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.PostRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +34,7 @@ public class PostManager implements PostService {
     public PostResponse createNewPost(PostSaveDto postSaveDto, long userId) { //TODO THIS METHOD SHOULD BE CHECKED!
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         Post post = Post.builder()
                 .caption(postSaveDto.getCaption())
                 .image(postSaveDto.getImage())
@@ -55,14 +57,14 @@ public class PostManager implements PostService {
     @Override
     public String deletePost(long postId, long userId) { //TODO THIS METHOD SHOULD BE CHECKED!
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("Post with the given id is not exist!", HttpStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         if(Objects.equals(post.getUser().getId(), user.getId())){
             postRepository.delete(post);
             return "Post successfully deleted!";
         }
-        throw new RuntimeException("You can't delete someone else's post!");
+        throw new VisualVoyageExceptions("You can't delete someone else's post!", HttpStatus.FORBIDDEN);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class PostManager implements PostService {
     @Override
     public PostResponse findPostById(long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("Post with the given id is not exist!", HttpStatus.NOT_FOUND));
         return PostResponse.builder()
                 .id(post.getId())
                 .caption(post.getCaption())
@@ -117,9 +119,9 @@ public class PostManager implements PostService {
     @Override
     public PostResponse savedPost(long postId, long userId) { //TODO THIS METHOD SHOULD BE CHECKED!
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("Post with the given id is not exist!", HttpStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
 
         if(user.getSavedPost().contains(post)){
             user.getSavedPost().remove(post);
@@ -140,9 +142,9 @@ public class PostManager implements PostService {
     @Override
     public PostResponse likePost(long postId, long userId) { //TODO THIS METHOD SHOULD BE CHECKED!
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("Post with the given id is not exist!", HttpStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!",HttpStatus.NOT_FOUND));
 
         if(post.getLiked().contains(user)){
             post.getLiked().remove(user);

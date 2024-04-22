@@ -7,11 +7,13 @@ import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.Comment;
 import com.vv.VisualVoyage.entities.Post;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.CommentRepository;
 import com.vv.VisualVoyage.repositories.PostRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,9 +38,9 @@ public class CommentManager implements CommentService {
     @Override
     public CommentResponse createComment(CommentSaveDto commentSaveDto, long postId, long userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("Post with the given id is not exist!", HttpStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         Comment comment = Comment.builder()
                 .content(commentSaveDto.getContent())
                 .createdAt(LocalDateTime.now())
@@ -82,9 +84,9 @@ public class CommentManager implements CommentService {
     @Override
     public CommentResponse likeComment(long commentId, long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("The comment with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("The comment with the given id is not exist!", HttpStatus.NOT_FOUND));
 
         if(!comment.getLiked().contains(user)){
             comment.getLiked().add(user);
@@ -126,7 +128,7 @@ public class CommentManager implements CommentService {
     public CommentResponse findCommentById(long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("The comment with the given id is not exist!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("The comment with the given id is not exist!", HttpStatus.NOT_FOUND));
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())

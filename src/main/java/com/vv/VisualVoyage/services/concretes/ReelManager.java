@@ -4,10 +4,12 @@ import com.vv.VisualVoyage.dtos.requests.ReelSaveDto;
 import com.vv.VisualVoyage.dtos.responses.ReelResponse;
 import com.vv.VisualVoyage.entities.Reel;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.ReelRepository;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.ReelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,7 +30,7 @@ public class ReelManager implements ReelService {
     @Override
     public ReelResponse createReel(ReelSaveDto reelSaveDto, long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         Reel reel = Reel.builder()
                 .title(reelSaveDto.getTitle())
                 .video(reelSaveDto.getVideo())
@@ -61,7 +63,7 @@ public class ReelManager implements ReelService {
     @Override
     public List<ReelResponse> findReelsByUser(long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found!")); //TODO GetAuthenticatedUser method must be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found!", HttpStatus.NOT_FOUND));
         List<Reel> reels = reelRepository.findReelsByUserId(user.getId());
 
         return reels.stream().map(reel -> ReelResponse.builder()

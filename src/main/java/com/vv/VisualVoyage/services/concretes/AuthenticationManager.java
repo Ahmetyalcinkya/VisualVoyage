@@ -5,10 +5,12 @@ import com.vv.VisualVoyage.dtos.requests.UserSaveDto;
 import com.vv.VisualVoyage.dtos.responses.LoginResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.AuthenticationService;
 import com.vv.VisualVoyage.utils.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +42,7 @@ public class AuthenticationManager implements AuthenticationService {
     public LoginResponse register(UserSaveDto userSaveDto) { //TODO CHECK THE SAVED POSTS FOR ALL RESPONSES AFTER UI COMPLETED!
 
         Optional<User> isExist = userRepository.findByEmail(userSaveDto.getEmail());
-        if(isExist.isPresent()) throw new RuntimeException("This email already used with another account!"); //TODO Throw exception!
+        if(isExist.isPresent()) throw new VisualVoyageExceptions("This email already used with another account!", HttpStatus.BAD_REQUEST);
 
         String encodedPassword = passwordEncoder.encode(userSaveDto.getPassword());
 
@@ -73,7 +75,8 @@ public class AuthenticationManager implements AuthenticationService {
     public UserResponse findUserByJwt(String jwt) {
         String email = JwtProvider.getEmailFromJwt(jwt);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found with the given email!")); //TODO Throw exception
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given email!", HttpStatus.NOT_FOUND));
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())

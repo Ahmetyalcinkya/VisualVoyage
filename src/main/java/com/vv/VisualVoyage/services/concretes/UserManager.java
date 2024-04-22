@@ -4,9 +4,11 @@ import com.vv.VisualVoyage.dtos.requests.UserUpdateDto;
 import com.vv.VisualVoyage.dtos.responses.PostResponse;
 import com.vv.VisualVoyage.dtos.responses.UserResponse;
 import com.vv.VisualVoyage.entities.User;
+import com.vv.VisualVoyage.exceptions.VisualVoyageExceptions;
 import com.vv.VisualVoyage.repositories.UserRepository;
 import com.vv.VisualVoyage.services.abstracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,7 @@ public class UserManager implements UserService {
     @Override
     public UserResponse findUserById(long id) {
         User user = userRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!
+               .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given id", HttpStatus.NOT_FOUND));
 
         return UserResponse.builder()
                 .id(user.getId())
@@ -64,7 +66,7 @@ public class UserManager implements UserService {
     @Override
     public UserResponse findUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with the given email!")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given email!", HttpStatus.NOT_FOUND));
 
         return UserResponse.builder()
                 .id(user.getId())
@@ -90,17 +92,23 @@ public class UserManager implements UserService {
     public String followUser(long reqUserId, long followUserId) { //TODO CHECK IF THE USER ALREADY FOLLOWING ? REMOVE : ADD
 
         User reqUser = userRepository.findById(reqUserId)
-                .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given id", HttpStatus.NOT_FOUND));
          User followUser = userRepository.findById(followUserId)
-                .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given id", HttpStatus.NOT_FOUND));
 
-        followUser.getFollowers().add(reqUser.getId());
-        reqUser.getFollowings().add(followUser.getId());
-
-        userRepository.save(reqUser);
-        userRepository.save(followUser);
-
-        return "User successfully followed!";
+        if(reqUser.getFollowings().contains(followUser.getId())){
+            reqUser.getFollowings().remove(followUser.getId());
+            followUser.getFollowers().remove(reqUser.getId());
+            userRepository.save(reqUser);
+            userRepository.save(followUser);
+            return "User successfully unfollowed!";
+        } else {
+            reqUser.getFollowings().add(followUser.getId());
+            followUser.getFollowers().add(reqUser.getId());
+            userRepository.save(reqUser);
+            userRepository.save(followUser);
+            return "User successfully followed!";
+        }
     }
 
     @Override
@@ -121,7 +129,7 @@ public class UserManager implements UserService {
     @Override
     public UserResponse updateUser(UserUpdateDto userUpdateDto, long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with the given id")); //TODO VisualVoyageException will be added!
+                .orElseThrow(() -> new VisualVoyageExceptions("User not found with the given id", HttpStatus.NOT_FOUND));
         if(userUpdateDto.getFirstName() != null && !userUpdateDto.getFirstName().isEmpty()) {
             user.setFirstName(userUpdateDto.getFirstName());
         }
