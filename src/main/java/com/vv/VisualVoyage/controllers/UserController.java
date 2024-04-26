@@ -33,7 +33,10 @@ public class UserController {
     public List<UserResponse> searchUser(@RequestParam("query") String query){
         return userService.searchUser(query);
     }
-
+    @GetMapping("/api/users/profile")
+    public UserResponse getUserFromJwt(@RequestHeader("Authorization") String jwt){
+        return authenticationService.findUserByJwt(jwt);
+    }
     @PutMapping("/api/users/")
     public UserResponse updateUser(@RequestBody UserUpdateDto userUpdateDto, @RequestHeader("Authorization") String jwt){
         UserResponse requestUser = authenticationService.findUserByJwt(jwt);
