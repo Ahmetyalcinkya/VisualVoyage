@@ -45,12 +45,13 @@ public class AuthenticationManager implements AuthenticationService {
 
         String encodedPassword = passwordEncoder.encode(userSaveDto.getPassword());
 
+        if(userSaveDto.getGender().equalsIgnoreCase("MALE") || userSaveDto.getGender().equalsIgnoreCase("FEMALE") ){
         User user = User.builder()
                 .firstName(userSaveDto.getFirstName())
                 .lastName(userSaveDto.getLastName())
                 .email(userSaveDto.getEmail())
                 .password(encodedPassword)
-                .gender(userSaveDto.getGender())
+                .gender(userSaveDto.getGender().toUpperCase())
                 .followers(new HashSet<>())
                 .followings(new HashSet<>())
                 .savedPost(new ArrayList<>())
@@ -60,6 +61,7 @@ public class AuthenticationManager implements AuthenticationService {
         String token = JwtProvider.generateToken(authentication);
 
         return new LoginResponse(token, "Register success!");
+        } else throw new VisualVoyageExceptions("Gender must be MALE or FEMALE!", HttpStatus.BAD_REQUEST);
     }
 
     @Transactional

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -156,5 +157,29 @@ public class CommentManager implements CommentService {
                         .gender(likedUser.getGender())
                         .build()).toList())
                 .build();
+    }
+
+    @Override
+    public List<CommentResponse> findPostsComments(long postId, int offset) {
+        List<Comment> comments = commentRepository.findPostsComments(postId, offset);
+        return comments.stream().map(comment -> CommentResponse.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .user(UserResponse.builder()
+                        .id(comment.getUser().getId())
+                        .firstName(comment.getUser().getFirstName())
+                        .lastName(comment.getUser().getLastName())
+                        .email(comment.getUser().getEmail())
+                        .gender(comment.getUser().getGender())
+                        .build())
+                .liked(comment.getLiked().stream().map(likedUser -> UserResponse.builder()
+                        .id(likedUser.getId())
+                        .firstName(likedUser.getFirstName())
+                        .lastName(likedUser.getLastName())
+                        .email(likedUser.getEmail())
+                        .gender(likedUser.getGender())
+                        .build()).toList())
+                .build()).toList();
     }
 }
