@@ -113,6 +113,13 @@ public class PostManager implements PostService {
                 .video(post.getVideo())
                 .createdAt(post.getCreatedAt())
                 .userId(post.getUser().getId())
+                .liked(post.getLiked().stream().map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .gender(user.getGender())
+                        .build()).toList())
                 .build()).collect(Collectors.toList());
     }
 

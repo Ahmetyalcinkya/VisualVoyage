@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query(value = "SELECT * FROM social.comment AS c WHERE c.post_id = :postId ORDER BY c.created_at LIMIT 10 OFFSET :offset", nativeQuery = true)
+    @Query(value = "SELECT * FROM social.comment AS c WHERE c.post_id = :postId ORDER BY c.created_at DESC LIMIT 10 OFFSET :offset", nativeQuery = true)
     List<Comment> findPostsComments(long postId, int offset);
 }

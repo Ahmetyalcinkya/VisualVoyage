@@ -37,7 +37,8 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
     @GetMapping("/posts/user/{userId}")
-    public ResponseEntity<List<PostResponse>> findPostsByUserId(@PathVariable long userId){
+    public ResponseEntity<List<PostResponse>> findPostsByUserId(@PathVariable long userId /*, @RequestHeader("Authorization") String jwt*/){
+//        authenticationService.findUserByJwt(jwt);
         List<PostResponse> posts = postService.findPostsByUserId(userId);
 
         return ResponseEntity.ok(posts);
