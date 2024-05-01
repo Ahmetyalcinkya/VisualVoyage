@@ -1,6 +1,9 @@
 package com.vv.VisualVoyage.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,18 +28,26 @@ public class User {
     private Long id;
 
     @Column(name = "first_name")
+    @NotBlank(message = "First name is mandatory!")
+    @Size(min = 2, max = 20, message = "First name length must be between 2 and 20 characters!")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "First name is mandatory!")
+    @Size(min = 2, max = 20, message = "First name length must be between 2 and 20 characters!")
     private String lastName;
 
     @Column(name = "email")
+    @NotBlank(message = "Email is mandatory!")
+    @Email(message = "Please enter a valid email!")
     private String email;
 
     @Column(name = "password")
+    @Size(min = 6, message = "Password length must be at least 6 characters!")
     private String password;
 
     @Column(name = "gender")
+    @NotBlank(message = "Gender is mandatory!")
     private String gender;
 
     private Set<Long> followers = new HashSet<>();
