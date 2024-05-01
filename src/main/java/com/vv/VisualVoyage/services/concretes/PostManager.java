@@ -96,8 +96,8 @@ public class PostManager implements PostService {
                         .id(user.getId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .gender(user.getGender())
+                        .profilePicture(user.getProfilePicture())
+                        .username(user.getUsername())
                         .build()).toList())
                 .build();
     }
@@ -117,8 +117,8 @@ public class PostManager implements PostService {
                         .id(user.getId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .gender(user.getGender())
+                        .profilePicture(user.getProfilePicture())
+                        .username(user.getUsername())
                         .build()).toList())
                 .build()).collect(Collectors.toList());
     }
@@ -173,8 +173,8 @@ public class PostManager implements PostService {
                         .id(likedUser.getId())
                         .firstName(likedUser.getFirstName())
                         .lastName(likedUser.getLastName())
-                        .email(likedUser.getEmail())
-                        .gender(likedUser.getGender())
+                        .profilePicture(likedUser.getProfilePicture())
+                        .username(likedUser.getUsername())
                         .build()).toList())
                 .build();
     }

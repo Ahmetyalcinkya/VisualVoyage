@@ -34,6 +34,8 @@ public class UserManager implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .profilePicture(user.getProfilePicture())
+                .username(user.getUsername())
                 .followers(user.getFollowers())
                 .followings(user.getFollowings())
                 .build()).collect(Collectors.toList());
@@ -50,6 +52,10 @@ public class UserManager implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .profilePicture(user.getProfilePicture())
+                .coverPicture(user.getCoverPicture())
+                .username(user.getUsername())
+                .biography(user.getBiography())
                 .followers(user.getFollowers())
                 .followings(user.getFollowings())
                 .savedPosts(user.getSavedPost().stream().map(post -> PostResponse.builder()
@@ -74,6 +80,10 @@ public class UserManager implements UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .gender(user.getGender())
+                .profilePicture(user.getProfilePicture())
+                .coverPicture(user.getCoverPicture())
+                .username(user.getUsername())
+                .biography(user.getBiography())
                 .followers(user.getFollowers())
                 .followings(user.getFollowings())
                 .savedPosts(user.getSavedPost().stream().map(post -> PostResponse.builder()
@@ -119,13 +129,12 @@ public class UserManager implements UserService {
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .email(user.getEmail())
-                .gender(user.getGender())
-                .followers(user.getFollowers())
-                .followings(user.getFollowings())
-                .build()).collect(Collectors.toList());
+                .profilePicture(user.getProfilePicture())
+                .username(user.getUsername())
+                .build()).toList();
     }
 
+    @Transactional
     @Override
     public UserResponse updateUser(UserUpdateDto userUpdateDto, long userId) {
         User user = userRepository.findById(userId)
@@ -139,7 +148,18 @@ public class UserManager implements UserService {
         if(userUpdateDto.getEmail() != null && !userUpdateDto.getEmail().isEmpty()) {
             user.setEmail(userUpdateDto.getEmail());
         }
+        if(userUpdateDto.getProfilePicture() != null && !userUpdateDto.getProfilePicture().isEmpty()) {
+            user.setProfilePicture(userUpdateDto.getProfilePicture());
+        }
+        if(userUpdateDto.getCoverPicture() != null && !userUpdateDto.getCoverPicture().isEmpty()) {
+            user.setCoverPicture(userUpdateDto.getCoverPicture());
+        }
+        if(userUpdateDto.getBiography() != null && !userUpdateDto.getBiography().isEmpty()) {
+            user.setBiography(userUpdateDto.getBiography());
+        }
         User updated = userRepository.save(user);
+        System.out.println(updated.getFirstName());
+        System.out.println(updated.getLastName());
 
         return UserResponse.builder()
                 .id(updated.getId())
@@ -147,6 +167,10 @@ public class UserManager implements UserService {
                 .lastName(updated.getLastName())
                 .email(updated.getEmail())
                 .gender(updated.getGender())
+                .profilePicture(updated.getProfilePicture())
+                .coverPicture(updated.getCoverPicture())
+                .username(updated.getUsername())
+                .biography(updated.getBiography())
                 .followers(updated.getFollowers())
                 .followings(updated.getFollowings())
                 .build();

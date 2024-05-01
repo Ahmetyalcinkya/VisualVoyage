@@ -47,8 +47,8 @@ public class ChatManager implements ChatService {
                             .id(user.getId())
                             .firstName(user.getFirstName())
                             .lastName(user.getLastName())
-                            .email(user.getEmail())
-                            .gender(user.getGender())
+                            .profilePicture(user.getProfilePicture())
+                            .username(user.getUsername())
                             .build()).toList())
                     .build();
         }
@@ -69,8 +69,8 @@ public class ChatManager implements ChatService {
                         .id(user.getId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .gender(user.getGender())
+                        .profilePicture(user.getProfilePicture())
+                        .username(user.getUsername())
                         .build()).toList())
                 .build();
     }
@@ -89,8 +89,8 @@ public class ChatManager implements ChatService {
                         .id(user.getId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .gender(user.getGender())
+                        .profilePicture(user.getProfilePicture())
+                        .username(user.getUsername())
                         .build()).toList())
                 .build();
     }
@@ -110,8 +110,8 @@ public class ChatManager implements ChatService {
                         .id(user.getId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .email(user.getEmail())
-                        .gender(user.getGender())
+                        .profilePicture(user.getProfilePicture())
+                        .username(user.getUsername())
                         .build()).toList())
                 .build()).toList();
     }

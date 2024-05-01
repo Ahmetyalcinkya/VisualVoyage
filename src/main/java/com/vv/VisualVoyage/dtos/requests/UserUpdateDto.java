@@ -13,4 +13,7 @@ public class UserUpdateDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String profilePicture;
+    private String coverPicture;
+    private String biography;
 }

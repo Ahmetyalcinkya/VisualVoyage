@@ -18,6 +18,10 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String gender;
+    private String profilePicture;
+    private String coverPicture;
+    private String username;
+    private String biography;
     private Set<Long> followers;
     private Set<Long> followings;
     private List<PostResponse> savedPosts;

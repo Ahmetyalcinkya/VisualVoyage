@@ -3,6 +3,7 @@ package com.vv.VisualVoyage.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,25 +31,43 @@ public class User {
     @Column(name = "first_name")
     @NotBlank(message = "First name is mandatory!")
     @Size(min = 2, max = 20, message = "First name length must be between 2 and 20 characters!")
+    @NotNull
     private String firstName;
 
     @Column(name = "last_name")
     @NotBlank(message = "First name is mandatory!")
     @Size(min = 2, max = 20, message = "First name length must be between 2 and 20 characters!")
+    @NotNull
     private String lastName;
 
     @Column(name = "email")
     @NotBlank(message = "Email is mandatory!")
     @Email(message = "Please enter a valid email!")
+    @NotNull
     private String email;
 
     @Column(name = "password")
     @Size(min = 6, message = "Password length must be at least 6 characters!")
+    @NotNull
     private String password;
 
     @Column(name = "gender")
     @NotBlank(message = "Gender is mandatory!")
+    @NotNull
     private String gender;
+
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
+    @Column(name = "cover_picture")
+    private String coverPicture;
+
+    @Column(name = "username")
+    @NotNull
+    private String username;
+
+    @Column(name = "biography")
+    private String biography;
 
     private Set<Long> followers = new HashSet<>();
 

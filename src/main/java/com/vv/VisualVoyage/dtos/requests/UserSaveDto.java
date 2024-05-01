@@ -15,4 +15,5 @@ public class UserSaveDto {
     private String email;
     private String password;
     private String gender;
+    private String username;
 }
